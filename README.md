@@ -17,6 +17,7 @@ REQUIRES
    the *NOTES* section below for a better alternative).
  - `pianobar` somewhere in your $PATH. If it's not in your $PATH edit
    the `$pianobar` variable inside the `control-pianobar.sh` script.
+ - `zenity`
 
 USAGE
 ============
