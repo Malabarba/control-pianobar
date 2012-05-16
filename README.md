@@ -25,6 +25,11 @@ USAGE
  - Place all contents directly inside your pianobar config folder
    (defaults to `$XDG_CONFIG_HOME/pianobar`, which defaults to
    `$HOME/.config/pianobar`).
+
+	mv control-pianobar.tar ~/.config/pianobar/
+	cd ~/.config/pianobar/
+	tar xf control-pianobar.tar
+	
  - Make sure boths scripts are marked as executable.   
  - Using your desktop environment, bind different hotkeys to calling
    `control-pianobar.sh <argument>` with different arguments.
