@@ -13,7 +13,7 @@ REQUIRES
 ============
 
  - Some implementation of the `notify-send` command (included with
-   most distros). In Ubuntu that's the `libnotify` package (but read
+   most distros). In Ubuntu that's the `libnotify-bin` package (but read
    the *NOTES* section below for a better alternative).
  - `pianobar` somewhere in your $PATH. If it's not in your $PATH edit
    the `$pianobar` variable inside the `control-pianobar.sh` script.
