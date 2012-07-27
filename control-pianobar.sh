@@ -40,6 +40,7 @@
 
 # You probably shouldn't mess with these (or anything else)
 notify="notify-send --hint=int:transient:1"
+zenity="zenity"
 logf="$fold/log"
 ctlf="$fold/ctl"
 an="$fold/artname"
