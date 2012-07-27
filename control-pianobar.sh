@@ -40,6 +40,7 @@
 
 # You probably shouldn't mess with these (or anything else)
 notify="notify-send --hint=int:transient:1"
+zenity="zenity"
 logf="$fold/log"
 ctlf="$fold/ctl"
 an="$fold/artname"
@@ -80,6 +81,10 @@ echo -n "-" > "$ctlf" ;;
     
     next|n)
 echo -n "n" > "$ctlf" ;;
+
+    tired|t)
+echo -n "t" > "$ctlf"
+$notify -t 2000 "Tired" "We won't play this song for at least a month.";;
     
     stop|quit|q)
 $notify -t 1000 "Quitting Pianobar"
