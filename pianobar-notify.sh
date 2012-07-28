@@ -40,6 +40,7 @@ blankicon="$fold/pandora.jpg"
 
 # Some of the following was copied from eventcmd.sh
 notify="notify-send --hint=int:transient:1"
+zenity="zenity"
 logf="$fold/log"
 ctlf="$fold/ctl"
 an="$fold/artname"
