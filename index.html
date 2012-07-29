@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>control-pianobar by Bruce-Connor</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>control-pianobar</h1>
+        <p>A pair of scripts that interact with pianobar entirely through notification bubbles and hotkeys. No terminal necessary!</p>
+
+        <p class="view"><a href="https://github.com/Bruce-Connor/control-pianobar">View the Project on GitHub <small>Bruce-Connor/control-pianobar</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/Bruce-Connor/control-pianobar/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/Bruce-Connor/control-pianobar/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/Bruce-Connor/control-pianobar">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <p>The point here is that once you set your bindings as described on
+<strong>Usage</strong> you'll be able to interact with pianobar without having
+focus the terminal it's running in, which distracts you and switches
+focus away from what you're doing.</p>
+
+<h2>What's Pianobar?</h2>
+
+<p>It's basically a full-of-features terminal client for Pandora.</p>
+
+<p>Quoting its <a href="http://6xq.net/projects/pianobar/">web page</a>: </p>
+
+<blockquote>
+<p>Pianobar is a free/open-source, console-based client for the
+personalized online radio Pandora.</p>
+</blockquote>
+
+<h2>Requirements</h2>
+
+<ul>
+<li>Some implementation of the <code>notify-send</code> command (included with
+most distros). In Ubuntu that's the <code>libnotify-bin</code> package (but read
+the <strong>NOTES</strong> section below for a better alternative).</li>
+<li>
+<code>pianobar</code> somewhere in your $PATH. If it's not in your $PATH edit
+the <code>$pianobar</code> variable inside the <code>control-pianobar.sh</code> script.</li>
+<li><code>zenity</code></li>
+</ul><h2>Usage</h2>
+
+<ol>
+<li>Download either the zip or the tarball (from the buttons above).</li>
+<li>
+<p>Place all contents directly inside your pianobar config folder
+(defaults to <code>$XDG_CONFIG_HOME/pianobar</code>, which defaults to
+<code>$HOME/.config/pianobar</code>).</p>
+
+<div class="highlight"><pre>mv control-pianobar.tar ~/.config/pianobar/
+<span class="nb">cd</span> ~/.config/pianobar/
+tar xf control-pianobar.tar
+</pre></div>
+</li>
+<li><p>Make sure boths scripts are marked as executable.   </p></li>
+<li><p>Using your desktop environment, bind different hotkeys to calling
+<code>control-pianobar.sh &lt;argument&gt;</code> with different arguments.</p></li>
+</ol><p>For example, bind <code>Media Play/Pause</code> to
+<code>$HOME/.config/pianobar/control-pianobar.sh p</code>. Now whenever you press
+<code>Media Play/Pause</code> pianobar will start in the background. If you have
+a default station set, the script just starts playing, otherwise it
+automatically ask you (with a popup) which station you want. From now
+on, pressing <code>Media Play/Pause</code> pauses and resumes the music.</p>
+
+<p>The <code>control-pianobar.sh</code> script takes many different arguments. You
+should bind each argument to a different media key (or just a
+hotkey). Running <code>control-pianobar.sh</code> with no arguments prints
+instructions on usage with the following examples.</p>
+
+<p>Bind this key =&gt; To this command:</p>
+
+<ul>
+<li>
+<strong>Media Play/Pause</strong> =&gt; <code>control-pianobar.sh p;</code>
+</li>
+<li>
+<strong>Media Stop</strong> =&gt; <code>control-pianobar.sh quit;</code>
+</li>
+<li>
+<strong>Media Previous</strong> =&gt; <code>control-pianobar.sh history;</code>
+</li>
+<li>
+<strong>Media Next</strong> =&gt; <code>control-pianobar.sh next;</code>
+</li>
+<li>
+<strong>Ctrl + Media Previous</strong> =&gt; <code>control-pianobar.sh previousstation;</code>
+</li>
+<li>
+<strong>Ctrl + Media Next</strong> =&gt; <code>control-pianobar.sh nextstation;</code>
+</li>
+<li>
+<strong>Browser Favorites</strong> =&gt; <code>control-pianobar.sh love;</code>
+</li>
+<li>
+<strong>Browser Stop</strong> =&gt; <code>control-pianobar.sh ban;</code>
+</li>
+<li>
+<strong>Browser Search</strong> =&gt; <code>control-pianobar.sh explain;</code>
+</li>
+<li>
+<strong>Super + Search</strong> =&gt; <code>control-pianobar.sh switchstation;</code>
+</li>
+</ul><h2>Notes</h2>
+
+<p>As of this writting <code>libnotify-bin</code> provides a buggy version of the
+notify-send command in Ubuntu, so some options of the command don't
+work. On Ubuntu, it is recommended that you install some patched
+version of the package that fixes the bug. Without this fix, you might
+not get album art, and all your notification will have the same
+duration of 10 seconds, which gets annoying fast.</p>
+
+<p>From the date of this writting (2012) I am using a patched version
+found in the
+<a href="http://www.webupd8.org/2010/05/finally-easy-way-to-customize-notify.html">ppa:leolik/leolik</a>.
+I take no responsibility regarding the contents of this ppa, I'm
+simply stating it's the one I used.</p>
+
+<h2>Author and Contributors</h2>
+
+<ul>
+<li>Author and Maintainer: <a href="@Bruce-Connor">Artur Malabarba</a>
+</li>
+<li>Contributor: <a href="https://github.com/Materdaddy" class="user-mention">@Materdaddy</a>
+</li>
+</ul>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/Bruce-Connor">Bruce-Connor</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
