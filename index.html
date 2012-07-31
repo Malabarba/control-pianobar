@@ -27,11 +27,14 @@
     <!--  -->
   </head>
   <body>
-    <!-- <\!-- Facebook Preparation -\-> -->
-    <!-- <div id="fb-root"></div> -->
-    <!-- <script>(function(d, s, id) {var js, fjs = d.getElementsByTagName(s)[0];if (d.getElementById(id)) return;js = d.createElement(s); js.id = id;js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1";fjs.parentNode.insertBefore(js, fjs);}(document, 'script', 'facebook-jssdk'));</script> -->
-    <!-- <\!--  -\-> -->
-    
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/pt_BR/all.js#xfbml=1";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>    
     <div class="wrapper">
       <header>
         <!-- Abstract -->
@@ -45,10 +48,11 @@
           <li><a href="https://github.com/Bruce-Connor/control-pianobar">View On <strong>GitHub</strong></a></li>
         </ul>
         
-        <!-- <\!-- FaceBook Like Button. -\-> -->
-        <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fbruce-connor.github.com%2Fcontrol-pianobar%2F&amp;send=false&amp;layout=standard&amp;width=400&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;height=35" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:400px; height:35px;" allowTransparency="true"></iframe>
+        <!-- FaceBook Like Button. -->
+        <fb:like href="http://bruce-connor.github.com/control-pianobar/" send="false" layout="button_count" width="90" show_faces="false" font="arial"></fb:like>
+        <!-- <iframe src="http://www.facebook.com/plugins/like.php?href=http%3A%2F%2Fbruce-connor.github.com%2Fcontrol-pianobar%2F&amp;send=false&amp;layout=standard&amp;width=400&amp;show_faces=false&amp;action=like&amp;colorscheme=light&amp;font=arial&amp;height=50" scrolling="no" frameborder="0" style="border:none; overflow:visible; width:400px; height:50px;" allowTransparency="true"> </iframe> -->
         <!--  -->
-        
+
         <!-- Place this tag where you want the +1 button to render. -->
         <div class="g-plusone" data-annotation="none"></div>
         <!--  -->
@@ -90,8 +94,7 @@
           <li>Some implementation of the <code>notify-send</code> command (included with
             most distros). In Ubuntu that's the <code>libnotify-bin</code> package (but read
             the <strong>NOTES</strong> section below for a better alternative).</li>
-          <li>
-            <code>pianobar</code> somewhere in your $PATH. If it's not in your $PATH edit
+          <li><code>pianobar</code> somewhere in your <code>$PATH</code>. If it's not in your <code>$PATH</code> edit
             the <code>$pianobar</code> variable inside the <code>control-pianobar.sh</code> script.</li>
           <li><code>zenity</code></li>
         </ul><h2>Usage</h2>
