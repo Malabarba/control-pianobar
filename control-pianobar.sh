@@ -28,17 +28,21 @@
 #
 # # # Start pianobar by running 'control-pianobar.sh p'
 #
-# These should match YOUR configs
+# These variables should match YOUR configs
   # Your config folder
   fold="$XDG_CONFIG_HOME/pianobar"
   # The pianobar executable
   pianobar="pianobar"
   # A blank icon to show when no albumart is found. I prefer to use
   # the actual pandora icon for this, which you can easily find and
-  # download yourself.
+  # download yourself. I don't include it here for copyright concerns.
   blankicon="$fold/pandora.jpg"
-
+  
 # You probably shouldn't mess with these (or anything else)
+if [[ "$fold" == "/pianobar" ]]; then
+    fold="$HOME/.config/pianobar"
+    blankicon="$fold""$blankicon"
+fi
 notify="notify-send --hint=int:transient:1"
 zenity="zenity"
 logf="$fold/log"

@@ -39,6 +39,10 @@ controlpianobar="$fold/control-pianobar.sh"
 blankicon="$fold/pandora.jpg"
 
 # Some of the following was copied from eventcmd.sh
+if [[ "$fold" == "/pianobar" ]]; then
+    fold="$HOME/.config/pianobar"
+    blankicon="$fold""$blankicon"
+fi
 notify="notify-send --hint=int:transient:1"
 zenity="zenity"
 logf="$fold/log"
