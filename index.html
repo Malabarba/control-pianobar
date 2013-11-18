@@ -107,28 +107,42 @@
         <h2>Requirements</h2>
 
         <ul>
+          <li><code>bash</code> (obviously);</li>
+          <li><code>zenity</code> (available in most package repositories);</li>
           <li>Some implementation of the <code>notify-send</code> command (included with
             most distros). In Ubuntu that's the <code>libnotify-bin</code> package (but read
-            the <strong>NOTES</strong> section below for a better alternative).</li>
+            the <strong>NOTES</strong> section below for a better alternative);</li>
           <li><code>pianobar</code> somewhere in your <code>$PATH</code>. If it's not in your <code>$PATH</code> edit
             the <code>$pianobar</code> variable inside the <code>control-pianobar.sh</code> script.</li>
-          <li><code>zenity</code></li>
         </ul><h2>Usage</h2>
 
         <ol>
-          <li>Download either the zip or the tarball (from the buttons to the left).</li>
+          <li>Download either the
+            <a href="https://github.com/Bruce-Connor/control-pianobar/zipball/master"
+          onClick="_gaq.push(['_trackEvent', 'External Link', 'Zip
+          Download', 'Left Sidebar']);"><strong>ZIP File</strong></a>
+            or the
+            <a href="https://github.com/Bruce-Connor/control-pianobar/tarball/master"
+          onClick="_gaq.push(['_trackEvent', 'External Link', 'Tar
+          Download', 'Left Sidebar']);"><strong>TAR Ball</strong></a>.</li>
           <li>
-            <p>Place all contents directly inside your pianobar config folder
-              (defaults to <code>$XDG_CONFIG_HOME/pianobar</code>, which defaults to
-              <code>$HOME/.config/pianobar</code>).</p>
+            <p>Place all contents directly inside your pianobar config
+              folder. <br />This defaults to
+              <code>$XDG_CONFIG_HOME/pianobar</code>, which is usually
+              <code>$HOME/.config/pianobar</code>.</p>
 
-            <div class="highlight"><pre>mv control-pianobar.tar ~/.config/pianobar/
+            <div class="highlight">
+              <pre><span class="nb">mv</span> control-pianobar.tar ~/.config/pianobar/
 <span class="nb">cd</span> ~/.config/pianobar/
-tar xf control-pianobar.tar
+<span class="nb">tar</span> xf control-pianobar.tar
 </pre></div>
           </li>
-          <li>Add the line <code>event_command = /FULL/PATH/pianobar-notify.sh</code> to your pianobar config file. <code>/FULL/PATH/</code> is where you extracted the files (probably <code>/home/USER/.config/pianobar</code>).</li>
-          <li><p>Make sure boths scripts are marked as executable.   </p></li>
+          <li>Add the line <br />
+            <code>event_command = /FULL/PATH/pianobar-notify.sh</code><br />
+            to your pianobar config file.<br />
+            <code>/FULL/PATH/</code> is where you extracted the files (probably <code>/home/USER/.config/pianobar</code>).
+          </li>
+          <li><p>Make sure boths scripts are marked as executable.</p></li>
           <li><p>Using your desktop environment, bind different hotkeys to calling
               <code>control-pianobar.sh &lt;argument&gt;</code> with different arguments.</p></li>
         </ol><p>For example, bind <code>Media Play/Pause</code> to
