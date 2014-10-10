@@ -40,8 +40,8 @@
   
 # You probably shouldn't mess with these (or anything else)
 if [[ "$fold" == "/pianobar" ]]; then
-    fold="$HOME/.config/pianobar"
-    blankicon="$fold""$blankicon"
+	fold="$HOME/.config/pianobar"
+  blankicon="$fold""$blankicon"
 fi
 notify="notify-send --hint=int:transient:1"
 zenity="zenity"
@@ -58,112 +58,136 @@ stl="$fold/stationlist"
 
 echo "" > "$logf"
 case $1 in
-    p|pause|play)
-if [[ -n `pidof pianobar` ]]; then
-echo -n "p" > "$ctlf"
-if [[ "$(cat $ip)" == 1 ]]; then
-echo "0" > "$ip"
-$notify -t 2500 -i "`cat $an`" "Song Paused" "`cat $fold/nowplaying`"
-else
-echo "1" > "$ip"
-$notify -t 2500 -i "`cat $an`" "Song Playing" "`cat $fold/nowplaying`"
-fi
-else
-mkdir -p "$fold/albumart"
-rm "$logf" 2> /dev/null
-rm "$ctlf" 2> /dev/null
-mkfifo "$ctlf"
-$notify -t 2500 "Starting Pianobar" "Logging in..."
-"$pianobar" | tee "$logf"
-fi;;
-    
-    love|l|+)
-echo -n "+" > "$ctlf" ;;
-    
-    ban|b|-|hate)
-echo -n "-" > "$ctlf" ;;
-    
-    next|n)
-echo -n "n" > "$ctlf" ;;
 
-    tired|t)
-echo -n "t" > "$ctlf"
-$notify -t 2000 "Tired" "We won't play this song for at least a month.";;
+p|pause|play)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "p" > "$ctlf"
+		if [[ "$(cat $ip)" == 1 ]]; then
+			echo "0" > "$ip"
+			$notify -t 2500 -i "`cat $an`" "Song Paused" "`cat $fold/nowplaying`"
+		else
+			echo "1" > "$ip"
+			$notify -t 2500 -i "`cat $an`" "Song Playing" "`cat $fold/nowplaying`"
+		fi
+	else
+		mkdir -p "$fold/albumart"
+		rm "$logf" 2> /dev/null
+		rm "$ctlf" 2> /dev/null
+		mkfifo "$ctlf"
+		$notify -t 2500 "Starting Pianobar" "Logging in..."
+		"$pianobar" | tee "$logf"
+	fi;;
     
-    stop|quit|q)
-$notify -t 1000 "Quitting Pianobar"
-echo -n "q" > "$ctlf"
-echo "0" > "$ip"
-sleep 1
-if [[ -n $(pidof pianobar) ]]; then
-$notify -t 1000 "Oops" "Something went wrong. \n Force quitting..."
-kill -9 $(pidof pianobar)
-if [[ -n $(pidof pianobar) ]]; then
-$notify -t 2000 "I'm Sorry" "I don't know what's happening. Could you try killing it manually?"
-else
-$notify -t 2000 "Success" "Pianobar closed."
-fi
-fi;;
+love|l|+)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "+" > "$ctlf"
+	fi;;
     
-    explain|e)
-echo -n "e" > "$ctlf" ;;
+ban|b|-|hate)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "-" > "$ctlf"
+	fi;;
     
-    playing|current|c)
-sleep 1
-time="$(grep "#" "$logf" --text | tail -1 | sed 's/.*# \+-\([0-9:]\+\)\/\([0-9:]\+\)/\\\\-\1\\\/\2/')"
-$notify -t 5000 -i "`cat $an`" "$(cat "$np")" "$(sed "1 s/.*/$time/" "$ds")";;
+next|n)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "n" > "$ctlf"
+	fi;;
+
+tired|t)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "t" > "$ctlf"
+		$notify -t 2000 "Tired" "We won't play this song for at least a month."
+	fi;;
     
-    nextstation|ns)
-stat="$(grep --text "^Station: " "$ds" | sed 's/Station: //')"
-newnum="$((`grep --text "$stat" "$stl" | sed 's/\([0-9]\+\)).*/\1/'`+1))"
-newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
-if [[ -z "$(grep "^-->" "$newstt")" ]]; then
-newnum=0
-newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
-fi
-echo "s$newnum" > "$ctlf"
-$notify -t 2000 "Switching station" "$newstt";;
+stop|quit|q)
+	if [[ -n `pidof pianobar` ]]; then
+		$notify -t 1000 "Quitting Pianobar"
+		echo -n "q" > "$ctlf"
+		echo "0" > "$ip"
+		sleep 1
+		if [[ -n $(pidof pianobar) ]]; then
+			$notify -t 1000 "Oops" "Something went wrong. \n Force quitting..."
+			kill -9 $(pidof pianobar)
+			if [[ -n $(pidof pianobar) ]]; then
+				$notify -t 2000 "I'm Sorry" "I don't know what's happening. Could you try killing it manually?"
+			else
+				$notify -t 2000 "Success" "Pianobar closed."
+			fi
+		fi;;
     
-    prevstation|ps)
-stat="$(grep --text "^Station: " "$ds" | sed 's/Station: //')"
-newnum="$((`grep --text "$stat" "$stl" | sed 's/\([0-9]\+\)).*/\1/'`-1))"
-[[ "$newnum" -lt 0 ]] && newnum=$(($(wc -l < "$stl")-1))
-newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
-echo "s$newnum" > "$ctlf"
-$notify -t 2000 "Switching station" "$newstt";;
+explain|e)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "e" > "$ctlf"
+	fi;;
     
-    switchstation|ss)
-text="$(grep --text "[0-9]\+)" "$logf" | sed 's/.*\t\(.*)\) *\(Q \+\)\?\([^ ].*\)/\1 \3/')""\n \n Type a number."
-newnum="$($zenity --entry --title="Switch Station" --text="$(cat "$stl")\n Pick a number.")"
-if [[ -n "$newnum" ]]; then
-newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
-echo "s$newnum" > "$ctlf"
-$notify -t 2000 "Switching station" "$newstt"
-fi;;
+playing|current|c)
+	if [[ -n `pidof pianobar` ]]; then
+		sleep 1
+		time="$(grep "#" "$logf" --text | tail -1 | sed 's/.*# \+-\([0-9:]\+\)\/\([0-9:]\+\)/\\\\-\1\\\/\2/')"
+		$notify -t 5000 -i "`cat $an`" "$(cat "$np")" "$(sed "1 s/.*/$time/" "$ds")"
+	fi;;
     
-    upcoming|queue|u)
-echo -n "u" > "$ctlf"
-sleep .5
-list="$(grep --text '[0-9])' $logf | sed 's/.*\t [0-9])/*/')"
-if [[ -z "$list" ]]; then
-$notify "No Upcoming Songs" "This is probably the last song in the list."
-else
-$notify -t 5000 "Upcoming Songs" "$list"
-fi;;
+nextstation|ns)
+	if [[ -n `pidof pianobar` ]]; then
+		stat="$(grep --text "^Station: " "$ds" | sed 's/Station: //')"
+		newnum="$((`grep --text "$stat" "$stl" | sed 's/\([0-9]\+\)).*/\1/'`+1))"
+		newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
+		if [[ -z "$(grep "^-->" "$newstt")" ]]; then
+			newnum=0
+			newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
+		fi
+		echo "s$newnum" > "$ctlf"
+		$notify -t 2000 "Switching station" "$newstt"
+	fi;;
     
-    "history"|h)
-echo -n "h" > "$ctlf"
-text="$(grep --text "[0-9]\+)" "$logf" | sed 's/.*\t\(.*) *[^ ].*\)/\1/')""\n \n Type a number."
-snum="$($zenity --entry --title="History" --text="$text")"
-if [[ -n "$snum" ]]; then
-echo "1" > "$ine"
-echo "$snum" > "$ctlf"
-echo -n "$($zenity --entry --title="Do what?" --text="Love[+], Ban[-], or Tired[t].")" > "$ctlf"
-else
-echo "" > "$ctlf"
-fi;;
+prevstation|ps)
+	if [[ -n `pidof pianobar` ]]; then
+		stat="$(grep --text "^Station: " "$ds" | sed 's/Station: //')"
+		newnum="$((`grep --text "$stat" "$stl" | sed 's/\([0-9]\+\)).*/\1/'`-1))"
+		[[ "$newnum" -lt 0 ]] && newnum=$(($(wc -l < "$stl")-1))
+		newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
+		echo "s$newnum" > "$ctlf"
+		$notify -t 2000 "Switching station" "$newstt"
+	fi;;
     
-    *)
+switchstation|ss)
+	if [[ -n `pidof pianobar` ]]; then
+		text="$(grep --text "[0-9]\+)" "$logf" | sed 's/.*\t\(.*)\) *\(Q \+\)\?\([^ ].*\)/\1 \3/')""\n \n Type a number."
+		newnum="$($zenity --entry --title="Switch Station" --text="$(cat "$stl")\n Pick a number.")"
+		if [[ -n "$newnum" ]]; then
+			newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
+			echo "s$newnum" > "$ctlf"
+			$notify -t 2000 "Switching station" "$newstt"
+		fi
+	fi;;
+    
+upcoming|queue|u)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "u" > "$ctlf"
+		sleep .5
+		list="$(grep --text '[0-9])' $logf | sed 's/.*\t [0-9])/*/')"
+		if [[ -z "$list" ]]; then
+			$notify "No Upcoming Songs" "This is probably the last song in the list."
+		else
+			$notify -t 5000 "Upcoming Songs" "$list"
+		fi
+	fi;;    
+
+"history"|h)
+	if [[ -n `pidof pianobar` ]]; then
+		echo -n "h" > "$ctlf"
+		text="$(grep --text "[0-9]\+)" "$logf" | sed 's/.*\t\(.*) *[^ ].*\)/\1/')""\n \n Type a number."
+		snum="$($zenity --entry --title="History" --text="$text")"
+		if [[ -n "$snum" ]]; then
+			echo "1" > "$ine"
+			echo "$snum" > "$ctlf"
+			echo -n "$($zenity --entry --title="Do what?" --text="Love[+], Ban[-], or Tired[t].")" > "$ctlf"
+		else
+			echo "" > "$ctlf"
+		fi
+	fi;;
+    
+*)
 
 
 echo -e "
