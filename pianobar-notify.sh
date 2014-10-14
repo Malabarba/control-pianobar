@@ -60,8 +60,8 @@ while read L; do
     k="`echo "$L" | cut -d '=' -f 1`"
     v="`echo "$L" | cut -d '=' -f 2`"
     export "$k=$v"
-done < <(grep -e '^\(title\|artist\|album\|stationName\|pRet\|pRetStr\|wRet\|wRetStr\|songDuration\|songPlayed\|rating\|coverArt\|stationCount\|station[0-9]\+\)=' /dev/stdin) # don't overwrite $1...
-
+		echo "$k=$v" >> "$fold/test"
+done < <(grep -e '^\(title\|artist\|album\|stationName\|songStationName\|pRet\|pRetStr\|wRet\|wRetStr\|songDuration\|songPlayed\|rating\|coverArt\|stationCount\|station[0-9]\+\)=' /dev/stdin) # don't overwrite $1...
 
 [[ "$rating" == 1 ]] && like="(like)"
 playpause="||"
@@ -85,16 +85,27 @@ else
 fi
 
 if [[ $songDuration -gt 10 ]]; then
+	if [[ -z $songStationName ]]; then
     echo -e "\-$played/$duration \t $playpause
 Album: $album
 Station: $stationName" > "$ds"
+	else
+		echo -e "\-$played/$duration \t $playpause
+Album: $album
+Station: $stationName - $songStationName" > "$ds"
+	fi
 else
+	if [[ -z $songStationName ]]; then
     echo "
 Album: $album
 Station: $stationName" > "$ds"
+	else
+		echo -e "\-$played/$duration \t $playpause
+Album: $album
+Station: $stationName - $songStationName" > "$ds"
+	fi
 fi
 echo "$artist - $title $like" > "$np"
-
 
 case "$1" in
     songstart)
