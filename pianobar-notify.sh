@@ -38,9 +38,6 @@ controlpianobar="$fold/control-pianobar.sh"
 # following variable.
 blankicon="$fold/pandora.jpg"
 
-# Change this to customize the filename scheme
-filename="$title - $artist"
-
 # Some of the following was copied from eventcmd.sh
 if [[ "$fold" == "/pianobar" ]]; then
     fold="$HOME/.config/pianobar"
@@ -58,8 +55,6 @@ su="$fold/showupcoming"
 stl="$fold/stationlist"
 ip="$fold/isplaying"
 ine="$fold/ignextevent"
-dn="$fold/downloadname"
-dd="$fold/downloaddir"
 
 while read L; do
     k="`echo "$L" | cut -d '=' -f 1`"
@@ -110,7 +105,6 @@ Station: $stationName - $songStationName" > "$ds"
 	fi
 fi
 echo "$artist - $title $like" > "$np"
-echo "$filename" > "$dn"
 
 case "$1" in
     songstart)
