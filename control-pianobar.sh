@@ -113,7 +113,8 @@ stop|quit|q)
 			else
 				$notify -t 2000 "Success" "Pianobar closed."
 			fi
-		fi;;
+		fi
+	fi;;
     
 explain|e)
 	if [[ -n `pidof pianobar` ]]; then
