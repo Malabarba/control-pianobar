@@ -38,6 +38,11 @@ controlpianobar="$fold/control-pianobar.sh"
 # following variable.
 blankicon="$fold/pandora.jpg"
 
+# Edit this to customize the format songs are displayed in
+# (e.g. "$title - $artist" instead of "$artist - $title")
+# Possible variables you can use are $artist, $title, and $album.
+songname(){ echo "$artist - $title";};
+
 # Some of the following was copied from eventcmd.sh
 if [[ "$fold" == "/pianobar" ]]; then
     fold="$HOME/.config/pianobar"
@@ -104,7 +109,7 @@ Album: $album
 Station: $stationName - $songStationName" > "$ds"
 	fi
 fi
-echo "$artist - $title $like" > "$np"
+echo "$(songname) $like" > "$np"
 
 case "$1" in
     songstart)
@@ -141,7 +146,7 @@ case "$1" in
 		  $notify -t 2500 "Song Liked" ""
 		  rm -f "$ine"
 	   else
-		  $notify -t 2500 -i "`cat $an`" "Song Liked" "$artist - $title"
+		  $notify -t 2500 -i "`cat $an`" "Song Liked" "`echo $(songname)`"
 	   fi;;
     
     songban)
@@ -149,7 +154,7 @@ case "$1" in
 		  $notify -t 2500 "Song Banned" ""
 		  rm -f "$ine"
 	   else
-		  $notify -t 2500 -i "`cat $an`" "Song Banned" "$artist - $title"
+		  $notify -t 2500 -i "`cat $an`" "Song Banned" "`echo $(songname)`"
 	   fi;;
     
     songshelf)
@@ -157,7 +162,7 @@ case "$1" in
 		  $notify -t 2500 "Song Put Away" ""
 		  rm -f "$ine"
 	   else
-		  $notify -t 2500 -i "`cat $an`" "Song Put Away" "$artist - $title"
+		  $notify -t 2500 -i "`cat $an`" "Song Put Away" "`echo $(songname)`"
 	   fi;;
     
     stationfetchplaylist)
