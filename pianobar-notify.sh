@@ -175,7 +175,7 @@ case "$1" in
 			 echo "$stnum) "$(eval "echo \$station$stnum") >> "$stl"
 		  done
 	   fi
-	   echo "$($zenity --entry --title="Switch Station" --text="$(cat "$stl")")" > "$ctlf"
+	   echo "s$($zenity --entry --title="Switch Station" --text="$(cat "$stl")")" > "$ctlf"
 	   ;;
     
     userlogin)
