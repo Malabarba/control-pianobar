@@ -43,6 +43,16 @@ blankicon="$fold/pandora.jpg"
 # Possible variables you can use are $artist, $title, and $album.
 songname(){ echo "$artist - $title";};
 
+# Edit to change the naming format of downloaded songs
+# Possible variables are $title, $artist, and $album
+filename(){ echo "$title - $artist";};
+
+# Change this to "TRUE" to download every song automatically
+downall="FALSE"
+
+# Change this to "TRUE" to download (liked) songs automatically
+downliked="FALSE"
+
 # Some of the following was copied from eventcmd.sh
 if [[ "$fold" == "/pianobar" ]]; then
     fold="$HOME/.config/pianobar"
@@ -60,6 +70,8 @@ su="$fold/showupcoming"
 stl="$fold/stationlist"
 ip="$fold/isplaying"
 ine="$fold/ignextevent"
+dn="$fold/downloadname"
+dd="$fold/downloaddir"
 
 while read L; do
     k="`echo "$L" | cut -d '=' -f 1`"
@@ -110,6 +122,12 @@ Station: $stationName - $songStationName" > "$ds"
 	fi
 fi
 echo "$(songname) $like" > "$np"
+echo $(filename) > "$dn"
+if [[ -z $songStationName ]]; then
+	echo "$stationName" > "$dd"
+else
+	echo "$songStationName" > "$dd"
+fi
 
 case "$1" in
     songstart)
@@ -134,7 +152,11 @@ case "$1" in
 	   if [[ -e "$su" ]]; then
 		  $controlpianobar u 7 &
 		  rm -f "$su"
-	   fi;;
+	   fi
+		if [[ "$downall" == "TRUE" ]]; then $controlpianobar d 10 & fi
+		if [[ "$downliked" == "TRUE" ]]; then
+			if [[ "$rating" == 1 ]]; then $controlpianobar d 10 & fi
+		fi;;
     
     songexplain)
 	   cp "$ds" "$dse"
@@ -147,7 +169,9 @@ case "$1" in
 		  rm -f "$ine"
 	   else
 		  $notify -t 2500 -i "`cat $an`" "Song Liked" "`echo $(songname)`"
-	   fi;;
+	   fi
+		 if [[ "$downliked" == "TRUE" ]]; then $controlpianobar d 3 &
+		 fi;;
     
     songban)
 	   if [[ -e "$ine" ]]; then
