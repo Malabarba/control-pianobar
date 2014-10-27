@@ -53,6 +53,9 @@ ds="$fold/durationstation"
 ip="$fold/isplaying"
 ine="$fold/ignextevent"
 stl="$fold/stationlist"
+dn="$fold/downloadname"
+dd="$fold/downloaddir"
+du="$fold/downloadurl"
 
 [[ -n "$2" ]] && sleep "$2"
 
@@ -78,6 +81,23 @@ p|pause|play)
 		"$pianobar" | tee "$logf"
 	fi;;
     
+download|d)
+	if [[ -n `pidof pianobar` ]]; then	
+		echo -n "$" > "$ctlf"
+		tac "$logf" | grep -am1 audioUrl | sed '{ s/^.*audioUrl:\t//; }' | cat > "$du"
+		mkdir -p "$fold/songs/`cat $dd`"
+		cd "$fold/songs/`cat $dd`"
+		if [[ -z `cat "$du" | grep mp3` ]]; then ext="m4a"
+		else ext="mp3"
+		fi
+		if [[ ! -e "`cat $dn`.$ext" ]]; then
+			$notify -t 4000 "Downloading..." "'`cat $dn`.$ext' to `cat $dd`"
+			wget -q -O "`cat $dn`.$ext" "`cat $du`" &
+		else
+			$notify -t 2000 "`cat $dn`.$ext" "Already exists in `cat $dd`"
+		fi
+	fi;;
+
 love|l|+)
 	if [[ -n `pidof pianobar` ]]; then
 		echo -n "+" > "$ctlf"
@@ -195,7 +215,7 @@ echo -e "
 \\033[1mWhat's the point?\\033[0m
 This script takes a single argument. Possible arguments are:
 \\033[1;34m play, love, hate, next, stop, explain, playing, upcoming,
-history, (next|prev|switch)station\\033[0m.
+history, download, (next|prev|switch)station\\033[0m.
 The behavior is mostly the same as running the respective action
 inside pianobar, except you interact with notification bubbles.
 
@@ -223,7 +243,13 @@ systems, you'll get varying behavior. It is also recommended that
 you create a file \".notify-osd\" in your \$HOME with the line
 \"bubble-icon-size = 70px\". This will make the album art icons
 bigger and more visible, but be aware that it will also affect
-notifications from other software.\\033[0;30m
+notifications from other software.
+
+The download command uses wget to download the songs into directories
+named after their respective stations. If you have low speed internet,
+or there are lots of people hogging the bandwidth so you can't download
+and play pianobar at the same time; try adding '--limit-rate=25K' to the
+wget command above.\\033[0;30m
 
 \\033[1mUSAGE:\\033[0m
 Bind \"PATH/TO/control-pianobar.sh <argument>\" to a hotkey in your
@@ -242,6 +268,7 @@ Bind this key - To this command
 \\033[1;34m Browser Stop\\033[0m - control-pianobar.sh ban;
 \\033[1;34m Browser Search\\033[0m - control-pianobar.sh explain;
 \\033[1;34m Super + Search\\033[0m - control-pianobar.sh switchstation;
+\\033[1;34m Alt + D\\033[0m - control-pianobar.sh download;
 
 This script does take a second argument, but the user need not
 worry about it. It's used by notify-pianobar.sh to make some
