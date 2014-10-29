@@ -72,6 +72,7 @@ ip="$fold/isplaying"
 ine="$fold/ignextevent"
 dn="$fold/downloadname"
 dd="$fold/downloaddir"
+st="$fold/state"
 
 while read L; do
     k="`echo "$L" | cut -d '=' -f 1`"
@@ -199,8 +200,9 @@ case "$1" in
 			 echo "$stnum) "$(eval "echo \$station$stnum") >> "$stl"
 		  done
 	   fi
-	   echo "s$($zenity --entry --title="Switch Station" --text="$(cat "$stl")")" > "$ctlf"
-	   ;;
+     if [[ ! `cat "$st" | grep "auto" | cut -d "=" -f 2 | wc -m` -gt 2 ]]; then
+	    echo "$($zenity --entry --title="Switch Station" --text="$(cat "$stl")")" > "$ctlf"
+     fi;;
     
     userlogin)
 	   if [ "$pRet" -ne 1 ]; then
