@@ -28,7 +28,7 @@
 # pianobar config file.
 #
 # Also check if this matches you config folder
-fold="$XDG_CONFIG_HOME/pianobar"
+fold="${XDG_CONFIG_HOME:-$HOME/.config}/pianobar"
 
 # You should also place the control-pianobar.sh script in the
 # config folder (or modify the following variable accordingly).

@@ -30,7 +30,7 @@
 #
 # These variables should match YOUR configs
   # Your config folder
-  fold="$XDG_CONFIG_HOME/pianobar"
+  fold="${XDG_CONFIG_HOME:-$HOME/.config}/pianobar"
   # The pianobar executable
   pianobar="pianobar"
   # A blank icon to show when no albumart is found. I prefer to use
