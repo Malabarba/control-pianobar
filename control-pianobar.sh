@@ -186,7 +186,7 @@ upcoming|queue|u)
 	if [[ -n `pidof pianobar` ]]; then
 		echo -n "u" > "$ctlf"
 		sleep .5
-		list="$(grep --text '[0-9])' $logf | sed 's/.*\t [0-9])/*/')"
+		list="$(grep --text '[0-9])' $logf | sed 's/.*\t [0-9])/*/; s/&/\&amp;/; s/</\&lt;/')"
 		if [[ -z "$list" ]]; then
 			$notify "No Upcoming Songs" "This is probably the last song in the list."
 		else
