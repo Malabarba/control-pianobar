@@ -97,8 +97,8 @@ download|d)
 		if [ $minsize -ge $filesize ]; then
 			$notify -t 3000 "Redownloading..." "Last attempt for $(cat $dn).$ext failed, retrying..."
 			rm -f $filename
-		else
-			true#$notify -t 1000 "Existing file size: $filesize bytes"
+		elif [ -s "$filename" ]; then
+			notify -t 1000 "Existing file size: $filesize bytes"
 		fi
 		
 		if [[ ! -e "`cat $dn`.$ext" ]]; then
