@@ -94,7 +94,7 @@ download|d)
 		minsize=500000 # minimum size in bytes, 500k
 		filename="$(readlink -f .)/$(cat $dn).$ext"
 		filesize=$(wc -c <"$filename")
-		filesize_mb=$(printf "%.1f\n" $(bc -l <<< "$filesize/1000000"))
+		filesize_mb=$(printf "%.2f\n" $(bc -l <<< "$filesize/1000000"))
 		if [ $minsize -ge $filesize ]; then
 			$notify -t 3000 "Redownloading..." "Last attempt for $(cat $dn).$ext failed, retrying..."
 			rm -f $filename
