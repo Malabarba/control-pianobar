@@ -90,6 +90,17 @@ download|d)
 		if [[ -z `cat "$du" | grep mp3` ]]; then ext="m4a"
 		else ext="mp3"
 		fi
+		
+		minsize=500000 # minimum size in bytes, 500k
+		filename="$(readlink -f .)/$(cat $dn).$ext"
+		filesize=$(wc -c <"$filename")
+		if [ $minsize -ge $filesize ]; then
+			$notify -t 3000 "Redownloading..." "Last attempt for $(cat $dn).$ext failed, retrying..."
+			rm -f $filename
+		else
+			true#$notify -t 1000 "Existing file size: $filesize bytes"
+		fi
+		
 		if [[ ! -e "`cat $dn`.$ext" ]]; then
 			$notify -t 4000 "Downloading..." "'`cat $dn`.$ext' to `cat $dd`"
 			wget -q -O "`cat $dn`.$ext" "`cat $du`" &
