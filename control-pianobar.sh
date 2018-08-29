@@ -92,19 +92,20 @@ download|d)
 		fi
 		
 		minsize=500000 # minimum size in bytes, 500k
-		filename="$(readlink -f .)/$(cat $dn).$ext"
+		basefilename="$(cat $dn).$ext"
+		filename="$(readlink -f .)/$basefilename"
 		filesize=$(wc -c <"$filename")
 		filesize_mb=$(printf "%.2f\n" $(bc -l <<< "$filesize/1000000"))
 		if [ $minsize -ge $filesize ]; then
-			$notify -t 3000 "Redownloading..." "Last attempt for $(cat $dn).$ext failed, retrying..."
-			rm -f $filename
+			$notify -t 3000 "Redownloading..." "Last attempt for $basefilename failed, retrying"
+			rm $filename 2> /dev/null
 		fi
 
 		if [[ ! -e "`cat $dn`.$ext" ]]; then
-			$notify -t 4000 "Downloading..." "'`cat $dn`.$ext' to `cat $dd`"
+			$notify -t 4000 "Downloading..." "'$basefilename' to `cat $dd`"
 			wget -q -O "`cat $dn`.$ext" "`cat $du`" &
 		else
-			$notify -t 2000 "`cat $dn`.$ext" "Already exists in `cat $dd` ($filesize_mb MB)"
+			$notify -t 2000 "$basefilename" "Already exists in `cat $dd` ($filesize_mb MB)"
 		fi
 	fi;;
 
