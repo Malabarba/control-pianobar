@@ -181,6 +181,18 @@ switchstation|ss)
 			$notify -t 2000 "Switching station" "$newstt"
 		fi
 	fi;;
+	
+
+switchstationlist|ssl)
+	if [[ -n `pidof pianobar` ]]; then
+		text="$(grep --text "[0-9]\+)" "$logf" | sed 's/.*\t\(.*)\) *\(Q \+\)\?\([^ ].*\)/\1 \3/')""\n \n Type a number."
+		newnum="$(echo "$(cat "$stl")" | $zenity --list --column="Station" --title="Switch Station" --text="Pick a number." | awk -F')' '{print $1}')"
+		if [[ -n "$newnum" ]]; then
+			newstt="$(sed "s/^$newnum) \(.*\)/-->\1/" "$stl" | sed 's/^[0-9]\+) \(.*\)/* \1/')"
+			echo "s$newnum" > "$ctlf"
+			$notify -t 2000 "Switching station" "$newstt"
+		fi
+	fi;;
     
 upcoming|queue|u)
 	if [[ -n `pidof pianobar` ]]; then
