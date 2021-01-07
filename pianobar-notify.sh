@@ -102,136 +102,137 @@ else
 fi
 
 if [[ $songDuration -gt 10 ]]; then
-	if [[ -z $songStationName ]]; then
+    if [[ -z $songStationName ]]; then
     echo -e "\-$played/$duration \t $playpause
 Album: $album
 Station: $stationName" > "$ds"
-	else
-		echo -e "\-$played/$duration \t $playpause
+    else
+        echo -e "\-$played/$duration \t $playpause
 Album: $album
 Station: $stationName - $songStationName" > "$ds"
-	fi
+    fi
 else
-	if [[ -z $songStationName ]]; then
+    if [[ -z $songStationName ]]; then
     echo "
 Album: $album
 Station: $stationName" > "$ds"
-	else
-		echo -e "\-$played/$duration \t $playpause
+    else
+        echo -e "\-$played/$duration \t $playpause
 Album: $album
 Station: $stationName - $songStationName" > "$ds"
-	fi
+    fi
 fi
 echo "$(songname) $like" > "$np"
 echo $(filename) > "$dn"
 if [[ -z $songStationName ]]; then
-	echo "$stationName" > "$dd"
+    echo "$stationName" > "$dd"
 else
-	echo "$songStationName" > "$dd"
+    echo "$songStationName" > "$dd"
 fi
 
 case "$1" in
     songstart)
-	   echo "1" > "$ip"
-	   cd "$fold/albumart"
+        echo "1" > "$ip"
+        cd "$fold/albumart"
 
-	   if [[ ! -e "$icon" ]]; then
+        if [[ ! -e "$icon" ]]; then
+            if [[ -n "$coverArt" ]]; then
+                wget -q -O "$icon" "$coverArt"
+                echo "$fold/albumart/$icon" > $an
+            else
+                echo "$blankicon" > $an
+            fi
+        else
+            echo "$fold/albumart/$icon" > $an
+        fi
 
-		  if [[ -n "$coverArt" ]]; then
-			 wget -q -O "$icon" "$coverArt"
-			 echo "$fold/albumart/$icon" > $an
-		  else
-			 echo "$blankicon" > $an
-		  fi
-	   else
-		  echo "$fold/albumart/$icon" > $an
-	   fi
+        $notify -t 7000 -i "`cat $an`" "`cat $np`" "`cat $ds`"
+        echo "" > "$logf"
 
-	   $notify -t 7000 -i "`cat $an`" "`cat $np`" "`cat $ds`"
-	   echo "" > "$logf"
-
-	   if [[ -e "$su" ]]; then
-		  $controlpianobar u 7 &
-		  rm -f "$su"
-	   fi
-		if [[ "$downall" == "TRUE" ]]; then $controlpianobar d 10 & fi
-		if [[ "$downliked" == "TRUE" ]]; then
-			if [[ "$rating" == 1 ]]; then $controlpianobar d 10 & fi
-		fi;;
+        if [[ -e "$su" ]]; then
+            $controlpianobar u 7 &
+            rm -f "$su"
+        fi
+        if [[ "$downall" == "TRUE" ]]; then $controlpianobar d 10 & fi
+        if [[ "$downliked" == "TRUE" ]]; then
+            if [[ "$rating" == 1 ]]; then $controlpianobar d 10 & fi
+        fi;;
     
     songexplain)
-	   cp "$ds" "$dse"
-	   tail -1 "$logf" | grep --text "(i) We're" | sed 's/.*(i).*features/*/' | sed 's/,/\n*/g' | sed 's/and \([^,]*\)\./\n* \1/' | sed 's/\* many other similarities.*/* and more./' >> "$dse"
-	   $notify -t 15000 -i "`cat $an`" "`cat $np`" "`cat $dse`";;
+        cp "$ds" "$dse"
+        tail -1 "$logf" | grep --text "(i) We're" | sed 's/.*(i).*features/*/' | sed 's/,/\n*/g' | sed 's/and \([^,]*\)\./\n* \1/' | sed 's/\* many other similarities.*/* and more./' >> "$dse"
+        $notify -t 15000 -i "`cat $an`" "`cat $np`" "`cat $dse`";;
     
     songlove)
-	   if [[ -e "$ine" ]]; then
-		  $notify -t 2500 "Song Liked" ""
-		  rm -f "$ine"
-	   else
-		  $notify -t 2500 -i "`cat $an`" "Song Liked" "`echo $(songname)`"
-	   fi
-		 if [[ "$downliked" == "TRUE" ]]; then $controlpianobar d 3 &
-		 fi;;
+        if [[ -e "$ine" ]]; then
+            $notify -t 2500 "Song Liked" ""
+            rm -f "$ine"
+        else
+            $notify -t 2500 -i "`cat $an`" "Song Liked" "`echo $(songname)`"
+        fi
+
+        if [[ "$downliked" == "TRUE" ]]; then 
+            $controlpianobar d 3 &
+        fi;;
     
     songban)
-	   if [[ -e "$ine" ]]; then
-		  $notify -t 2500 "Song Banned" ""
-		  rm -f "$ine"
-	   else
-		  $notify -t 2500 -i "`cat $an`" "Song Banned" "`echo $(songname)`"
-	   fi;;
+        if [[ -e "$ine" ]]; then
+            $notify -t 2500 "Song Banned" ""
+            rm -f "$ine"
+        else
+            $notify -t 2500 -i "`cat $an`" "Song Banned" "`echo $(songname)`"
+        fi;;
     
     songshelf)
-	   if [[ -e "$ine" ]]; then
-		  $notify -t 2500 "Song Put Away" ""
-		  rm -f "$ine"
-	   else
-		  $notify -t 2500 -i "`cat $an`" "Song Put Away" "`echo $(songname)`"
-	   fi;;
+        if [[ -e "$ine" ]]; then
+            $notify -t 2500 "Song Put Away" ""
+            rm -f "$ine"
+        else
+            $notify -t 2500 -i "`cat $an`" "Song Put Away" "`echo $(songname)`"
+        fi;;
     
     stationfetchplaylist)
-	   echo "1" > "$su";;
+        echo "1" > "$su";;
     
     usergetstations)
-	   if [[ $stationCount -gt 0 ]]; then
-		  rm -f "$stl"
-		  for stnum in $(seq 0 $(($stationCount-1))); do
-			 echo "$stnum) "$(eval "echo \$station$stnum") >> "$stl"
-		  done
-	   fi
-     if [[ ! `cat "$st" | grep "auto" | cut -d "=" -f 2 | wc -m` -gt 2 ]]; then
-	    echo "$($zenity --entry --title="Switch Station" --text="$(cat "$stl")")" > "$ctlf"
-     fi;;
+        if [[ $stationCount -gt 0 ]]; then
+            rm -f "$stl"
+            for stnum in $(seq 0 $(($stationCount-1))); do
+                echo "$stnum) "$(eval "echo \$station$stnum") >> "$stl"
+            done
+        fi
+
+        if [[ ! `cat "$st" | grep "auto" | cut -d "=" -f 2 | wc -m` -gt 2 ]]; then
+            echo "$($zenity --entry --title="Switch Station" --text="$(cat "$stl")")" > "$ctlf"
+        fi;;
     
     userlogin)
-	   if [ "$pRet" -ne 1 ]; then
-		  $notify -t 1500 "Login ERROR 1" "$pRetStr"
-		  $notify -t 6000 "Restart Tor" "This is probably a proxy problem. If tor and polipo are running and configured, restart tor and try again."
-		  # $notify -t 6000 "Restarting Tor" "Input root password, wait a few seconds, and try running pianobar again."
-            # sleep 1.5
-		  # xterm -e sudo rc.d restart tor && $notify -t 1000 "Success!"
-		# if [[ $? -eq 0 ]]; then
-		# $notify "Failure" "Sorry, that's all I can do."
-		# else
-		# $notify "Success" "I think it worked. Try running pianobar again."
-		# fi
-	   elif [ "$wRet" -ne 1 ]; then
-		  $notify "Login ERROR 2" "$wRetStr"
-	   else
-		  $notify -t 2000 "Login Successful" "Fetching Stations..."
-	   fi
-	   ;;
+        if [ "$pRet" -ne 1 ]; then
+            $notify -t 1500 "Login ERROR 1" "$pRetStr"
+            $notify -t 6000 "Restart Tor" "This is probably a proxy problem. If tor and polipo are running and configured, restart tor and try again."
+            # $notify -t 6000 "Restarting Tor" "Input root password, wait a few seconds, and try running pianobar again."
+                # sleep 1.5
+            # xterm -e sudo rc.d restart tor && $notify -t 1000 "Success!"
+            # if [[ $? -eq 0 ]]; then
+            # $notify "Failure" "Sorry, that's all I can do."
+            # else
+            # $notify "Success" "I think it worked. Try running pianobar again."
+            # fi
+        elif [ "$wRet" -ne 1 ]; then
+            $notify "Login ERROR 2" "$wRetStr"
+        else
+            $notify -t 2000 "Login Successful" "Fetching Stations..."
+        fi;;
     
     songfinish)
-	   exit;;
+       exit;;
     
     *)
-	   if [ "$pRet" -ne 1 ]; then
-		  $notify -i "$blankicon" "Pianobar - ERROR" "$1 failed: $pRetStr"
-	   elif [ "$wRet" -ne 1 ]; then
-		  $notify -i "$blankicon" "Pianobar - ERROR" "$1 failed: $wRetStr"
-	   else
-		  $notify -i "$blankicon" "$1" "fill $2"
-	   fi;;
+        if [ "$pRet" -ne 1 ]; then
+            $notify -i "$blankicon" "Pianobar - ERROR" "$1 failed: $pRetStr"
+        elif [ "$wRet" -ne 1 ]; then
+            $notify -i "$blankicon" "Pianobar - ERROR" "$1 failed: $wRetStr"
+        else
+            $notify -i "$blankicon" "$1" "fill $2"
+        fi;;
 esac

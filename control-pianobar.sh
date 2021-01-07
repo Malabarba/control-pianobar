@@ -40,8 +40,8 @@
   
 # You probably shouldn't mess with these (or anything else)
 if [[ "$fold" == "/pianobar" ]]; then
-	fold="$HOME/.config/pianobar"
-  blankicon="$fold""$blankicon"
+    fold="$HOME/.config/pianobar"
+    blankicon="$fold""$blankicon"
 fi
 notify="notify-send --hint=int:transient:1"
 zenity="zenity"
